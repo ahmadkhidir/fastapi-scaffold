@@ -1,0 +1,4 @@
+fastapi[standard]
+alembic
+sqlmodel
+psycopg2-binary

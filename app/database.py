@@ -14,6 +14,7 @@ engine = create_engine(
 
 
 def init_db():
+    '''Create the database tables (call if not using alembic)'''
     SQLModel.metadata.create_all(bind=engine)
 
 

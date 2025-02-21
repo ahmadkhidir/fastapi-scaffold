@@ -2,8 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import *
-from .models import *
+from .routers import auth, users
 from .database import init_db
 from . import config
 
@@ -11,7 +10,7 @@ from . import config
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # startup
-    init_db()
+    # init_db() # uncomment if not using alembic
     yield
     # shutdown
 
@@ -25,6 +24,9 @@ app.add_middleware(
     allow_methods=config.ALLOW_METHODS,
     allow_headers=config.ALLOW_HEADERS,
 )
+
+app.include_router(auth.router)
+app.include_router(users.router)
 
 # api = APIRouter(
 #     prefix="/api",

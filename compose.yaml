@@ -32,13 +32,13 @@ services:
   db:
     image: postgres
     restart: always
-    user: postgres
+    user: postgres # TODO: Set a non-root user for the database
     secrets:
       - db-password
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=example
+      - POSTGRES_DB=example # TODO: Set a database name
       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
     expose:
       - 5432
@@ -51,5 +51,5 @@ volumes:
   db-data:
 secrets:
   db-password:
-    file: .secrets/db/password.txt
+    file: .secrets/db/password.txt # TODO: Create this file and add a password
 

@@ -1,21 +1,20 @@
 from sqlmodel import SQLModel, create_engine, Session
 from fastapi import Depends
 from typing import Annotated
-from . import config
+from app import config
+from app.models.users import Role, Scope
+from sqlalchemy.sql import select
+from app.services.users import create_default_role_with_scope
 
 
 connect_args = ({"check_same_thread": False}
-                if config.DATABASE_URL.startswith("sqlite")
+                if (config.DATABASE_URL and config.DATABASE_URL.startswith("sqlite"))
                 else {})
 
+assert config.DATABASE_URL, "DATABASE_URL is not set in the environment"
 engine = create_engine(
     config.DATABASE_URL, connect_args=connect_args
 )
-
-
-def init_db():
-    '''Create the database tables (call if not using alembic)'''
-    SQLModel.metadata.create_all(bind=engine)
 
 
 def get_session():

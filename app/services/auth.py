@@ -30,6 +30,6 @@ def create_access_token(data: TokenPayload, expires_delta: timedelta = None):
 def decode_access_token(token: str) -> TokenPayload | None:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return TokenPayload.model_validate_strings(payload)
+        return TokenPayload.model_validate(payload)
     except PyJWTError:
         return None

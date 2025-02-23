@@ -1,6 +1,6 @@
 SHELL := /bin/bash  # Ensures a consistent shell (Linux and Git Bash on Windows)
 
-db-migrations:
+createmigrations:
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "Error: Migration comment is required"; \
 		exit 1; \
@@ -9,12 +9,13 @@ db-migrations:
 	docker compose exec server sh -c 'alembic -c alembic.ini revision --autogenerate -m "$(filter-out $@,$(MAKECMDGOALS))"'
 	@echo "Migration script generated"
 
-db-migrate:
+migrate:
 	@echo "Applying migration script"
 	docker compose exec server sh -c 'alembic -c alembic.ini upgrade head'
 	@echo "Migration script applied"
+	docker compose exec server sh -c 'python -m cli init_db'
 
-db-update:
+update:
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "Error: Migration comment is required"; \
 		exit 1; \
@@ -23,6 +24,10 @@ db-update:
 	$(MAKE) db-migrations "$(filter-out $@,$(MAKECMDGOALS))"
 	$(MAKE) db-migrate
 	@echo "Models updated"
+
+createadminuser:
+	@echo "Creating admin user"
+	docker compose exec server sh -c 'python -m cli create_admin_user'
 
 # Prevents make from interpreting the comment as a target
 %:

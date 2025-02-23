@@ -29,9 +29,6 @@ def create_admin_user():
         if not admin_role:
             print("Admin role does not exist.")
             return
-            # print("Creating admin role...")
-            # create_admin_role()
-            # admin_role = get_admin_role()
 
         username = input("Enter username: ")
         user = session.exec(select(User).filter(
@@ -60,41 +57,6 @@ def create_admin_user():
         print("Admin user created successfully.")
 
 
-# def create_admin_role():
-#     with next(get_session()) as session:
-#         admin_role = session.exec(
-#             select(Role).filter(Role.name == "admin")).first()
-#         if admin_role:
-#             print("Admin role already exists.")
-#             return
-
-#         # Define the CRUD scopes
-#         crud_scopes = [("admin:create", "Admin create scope"),
-#                         ("admin:read", "Admin read scope"),
-#                         ("admin:update", "Admin update scope"),
-#                         ("admin:delete", "Admin delete scope"),]
-#         scope_objects = []
-
-#         for scope_name, scope_desc in crud_scopes:
-#             scope = session.exec(select(Scope).filter(
-#                 Scope.name == scope_name)).first()
-#             if not scope:
-#                 scope = Scope(name=scope_name, description=scope_desc)
-#                 session.add(scope)
-#                 session.commit()
-#                 session.refresh(scope)
-#             scope_objects.append(scope)
-
-#         new_role = Role(
-#             name="admin",
-#             description="Admin role",
-#             scopes=scope_objects
-#         )
-#         session.add(new_role)
-#         session.commit()
-#         print("Admin role created successfully.")
-
-
 def init_db():
     '''Create the default roles and scopes'''
     print("Creating default roles and scopes...")
@@ -118,7 +80,6 @@ def init_db():
 
 commands = {
     "create_admin_user": create_admin_user,
-    # "create_admin_role": create_admin_role,
     "init_db": init_db
 }
 

@@ -2,9 +2,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import auth, users
-from app import config
-from app.dependencies import oauth2_scheme
+from app.api.v1.routers import auth, users
+from app.core import config
+from app.core.security import oauth2_scheme
 
 
 @asynccontextmanager

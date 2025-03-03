@@ -13,7 +13,7 @@ migrate:
 	@echo "Applying migration script"
 	docker compose exec server sh -c 'alembic -c alembic.ini upgrade head'
 	@echo "Migration script applied"
-	docker compose exec server sh -c 'python -m cli init_db'
+	docker compose exec server sh -c 'python -m app.cli init_db'
 
 update:
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
@@ -27,7 +27,7 @@ update:
 
 createadminuser:
 	@echo "Creating admin user"
-	docker compose exec server sh -c 'python -m cli create_admin_user'
+	docker compose exec server sh -c 'python -m app.cli create_admin_user'
 
 # Prevents make from interpreting the comment as a target
 %:

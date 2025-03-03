@@ -3,24 +3,27 @@ from sqlmodel import select
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from app.database import get_session
-from app.models.users import User, Role, Scope
+from app.db.session import get_session
+from app.db.models.users import User, Role, Scope
 from app.services.auth import hash_password
-from app import config
-from app.services.users import create_default_role_with_scope
+from app.core import config
+from app.services.users import RoleServices
+from app.db.repositories.users import RoleRepository, ScopeRepository, UserRepository
 
 def create_admin_user():
     with next(get_session()) as session:
 
-        def get_admin_role(): return session.exec(
-            select(Role).filter(Role.name == config.ADMIN_ROLE_NAME)).first()
+        # def get_admin_role(): return session.exec(
+        #     select(Role).filter(Role.name == config.ADMIN_ROLE_NAME)).first()
         
 
-        def get_user_role(): return session.exec(
-            select(Role).filter(Role.name == config.BASIC_ROLE_NAME)).first()
+        # def get_user_role(): return session.exec(
+        #     select(Role).filter(Role.name == config.BASIC_ROLE_NAME)).first()
         
-        user_role = get_user_role()
-        admin_role = get_admin_role()
+        # user_role = get_user_role()
+        # admin_role = get_admin_role()
+        user_role = RoleRepository.get_role_by_name(session, config.BASIC_ROLE_NAME)
+        admin_role = RoleRepository.get_role_by_name(session, config.ADMIN_ROLE_NAME)
         
         if not user_role:
             print("User role does not exist.")
@@ -31,8 +34,9 @@ def create_admin_user():
             return
 
         username = input("Enter username: ")
-        user = session.exec(select(User).filter(
-            User.username == username)).first()
+        # user = session.exec(select(User).filter(
+        #     User.username == username)).first()
+        user = UserRepository.get_user_by_username(session, username)
         if user:
             print("User already exists.")
             return
@@ -49,7 +53,7 @@ def create_admin_user():
             password=hash_password(password),
             first_name=first_name if first_name.isalpha() else None,
             last_name=last_name if last_name.isalpha() else None,
-            roles=[user_role, admin_role]
+            roles={user_role, admin_role}
         )
         session.add(new_user)
         session.commit()
@@ -61,14 +65,14 @@ def init_db():
     '''Create the default roles and scopes'''
     print("Creating default roles and scopes...")
     with next(get_session()) as session:
-        create_default_role_with_scope(
+        RoleServices.create_default_role_with_scope(
             session,
             perms=config.BASIC_DEFAULT_PERMISSIONS,
             role_name=config.BASIC_ROLE_NAME,
             role_desc=config.BASIC_ROLE_DESC
         )
 
-        create_default_role_with_scope(
+        RoleServices.create_default_role_with_scope(
             session,
             perms=config.ADMIN_DEFAULT_PERMISSIONS,
             role_name=config.ADMIN_ROLE_NAME,

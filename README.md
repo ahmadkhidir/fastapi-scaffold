@@ -1,4 +1,4 @@
-# {{fastapi}}
+# FastAPI Scaffold
 
 ## Project Description
 This project is a web application built using FastAPI, a modern, fast (high-performance), web framework for building APIs with Python 3.7+ based on standard Python type hints.
@@ -6,11 +6,11 @@ This project is a web application built using FastAPI, a modern, fast (high-perf
 ## Installation
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/{{fastapi}}.git
+    git clone https://github.com/ahmadkhidir/fastapi-scaffold.git
     ```
 2. Change to the project directory:
     ```bash
-    cd {{fastapi}}
+    cd fastapi-scaffold
     ```
 3. Create a virtual environment:
     ```bash
@@ -33,11 +33,11 @@ This project is a web application built using FastAPI, a modern, fast (high-perf
 ### Using Docker Compose
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/{{fastapi}}.git
+    git clone https://github.com/ahmadkhidir/fastapi-scaffold.git
     ```
 2. Change to the project directory:
     ```bash
-    cd {{fastapi}}
+    cd fastapi-scaffold
     ```
 3. Build and start the containers:
     ```bash

@@ -4,7 +4,6 @@ from fastapi import Depends
 from typing import Annotated
 from app.core import config
 
-
 connect_args = ({"check_same_thread": False}
                 if (config.DATABASE_URL and config.DATABASE_URL.startswith("sqlite"))
                 else {})
@@ -14,10 +13,14 @@ engine = create_engine(
     config.DATABASE_URL, connect_args=connect_args
 )
 
-
 def get_session():
+    """
+    Provide a database session.
+
+    Yields:
+        Session: A SQLAlchemy session.
+    """
     with Session(engine) as session:
         yield session
-
 
 SessionDep = Annotated[Session, Depends(get_session)]

@@ -14,6 +14,8 @@ migrate:
 	docker compose exec server sh -c 'alembic -c alembic.ini upgrade head'
 	@echo "Migration script applied"
 	docker compose exec server sh -c 'python -m app.cli init_db'
+	@echo "Restating server to apply changes"
+	docker compose restart server
 
 update:
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
